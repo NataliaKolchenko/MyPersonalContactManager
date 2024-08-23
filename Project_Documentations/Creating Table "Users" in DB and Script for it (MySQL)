@@ -1,0 +1,20 @@
+create table Users(
+id varchar(36) primary key,
+role int check(role between 0 and 1) not null,
+login varchar(128) not null unique,
+password varchar(128) not null,
+token varchar(256),
+name varchar(128) not null
+);
+
+insert into Users(id, role, login, password, token, name) values
+(UUID(), 0, 'user1', 'password1', NULL, 'John Doe'),
+(UUID(), 1, 'user2', 'password2', NULL, 'Jane Smith'),
+(UUID(), 0, 'user3', 'password3', NULL, 'Alice Johnson'),
+(UUID(), 1, 'user4', 'password4', NULL, 'Bob Brown'),
+(UUID(), 0, 'user5', 'password5', NULL, 'Charlie Green'),
+(UUID(), 1, 'user6', 'password6', NULL, 'Diana White'),
+(UUID(), 0, 'user7', 'password7', NULL, 'Eve Black'),
+(UUID(), 1, 'user8', 'password8', NULL, 'Frank Miller'),
+(UUID(), 0, 'user9', 'password9', NULL, 'Grace Lee'),
+(UUID(), 1, 'user10', 'password10', NULL, 'Henry Clark');
