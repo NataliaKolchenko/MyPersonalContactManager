@@ -3,6 +3,7 @@ package com.example.MyPersonalContactManager.repository;
 import com.example.MyPersonalContactManager.models.ContactModels.Contact;
 import com.example.MyPersonalContactManager.models.ContactModels.ContactDTOBig;
 import com.example.MyPersonalContactManager.models.ContactModels.Phone;
+import com.example.MyPersonalContactManager.repository.interfaces.ContactRepositoryInterface;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -15,11 +16,11 @@ import java.sql.Statement;
 import java.util.List;
 
 @Repository
-public class DatabaseContactRepository implements ContactRepositoryInterface<Contact, ContactDTOBig> {
+public class JdbcContactRepositoryImp implements ContactRepositoryInterface<Contact, ContactDTOBig> {
 
     private final JdbcTemplate jdbcTemplate;
 
-    public DatabaseContactRepository(JdbcTemplate jdbcTemplate) {
+    public JdbcContactRepositoryImp(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
@@ -129,6 +130,7 @@ public class DatabaseContactRepository implements ContactRepositoryInterface<Con
 
         return contactList.stream().toList();
     }
+
 
     @Override
     public ContactDTOBig updateContact(String id, ContactDTOBig newContact) {

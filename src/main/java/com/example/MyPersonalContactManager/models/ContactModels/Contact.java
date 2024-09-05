@@ -2,6 +2,7 @@ package com.example.MyPersonalContactManager.models.ContactModels;
 
 import com.example.MyPersonalContactManager.utils.UtilsContact;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
@@ -18,20 +19,34 @@ import static com.example.MyPersonalContactManager.utils.ConstantsContact.DEFAUL
 
 @Getter
 @Setter
+@Entity
+@Table(name = "Contacts")
 public class Contact {
+    @Id
     private String id;
+    @Column(name = "First_Name")
     @NotBlank
     private String firstName;
+    @Column(name = "Last_Name")
     private String lastName;
+    @Column(name = "Email")
     private String email;
     @NotEmpty
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "Contact_Id")
     private List<Phone> phones;
+    @Column(name = "Birth_Day")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate birthday;
+    @Column(name = "Address")
     private String address;
+    @Column(name = "Photo")
     private URL photo;
+    @Column(name = "Owner_Id")
     private String ownerId;
+    @Column(name = "Create_Date")
     private LocalDateTime createDate;
+    @Column(name = "Last_Update_Date")
     @Setter
     private LocalDateTime lastUpdateDate;
 
@@ -56,9 +71,9 @@ public class Contact {
     }
 
     //COPY CODE
-    public LocalDate getBirthday() {
+    public LocalDate getBirthday(LocalDate birthday) {
         UtilsContact utilsContact = new UtilsContact();
-        if (utilsContact.isBirthdayDefault(birthday)) {
+        if (utilsContact.isBirthdayDefault(this.birthday)) {
             return null;
         }
         return this.birthday;

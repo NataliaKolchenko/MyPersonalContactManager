@@ -1,4 +1,4 @@
-package com.example.MyPersonalContactManager.service;
+package com.example.MyPersonalContactManager.service.interfaces;
 
 import java.util.List;
 

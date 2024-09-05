@@ -7,7 +7,8 @@ import com.example.MyPersonalContactManager.models.UserModels.User;
 import com.example.MyPersonalContactManager.models.UserModels.UserDTOLogin;
 import com.example.MyPersonalContactManager.models.UserModels.UserDTORegister;
 import com.example.MyPersonalContactManager.models.UserModels.UserDTOResponse;
-import com.example.MyPersonalContactManager.repository.InterfaceUserRepository;
+import com.example.MyPersonalContactManager.repository.interfaces.UserRepositoryInterface;
+import com.example.MyPersonalContactManager.service.interfaces.UserServiceInterface;
 import com.example.MyPersonalContactManager.utils.UtilsRegistration;
 import com.example.MyPersonalContactManager.utils.UtilsUserAuthorization;
 import lombok.AllArgsConstructor;
@@ -17,9 +18,9 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class DataBaseUserService implements InterfaceUserService {
+public class UserServiceImp implements UserServiceInterface {
 
-    private final InterfaceUserRepository<User> userRepository;
+    private final UserRepositoryInterface<User> userRepository;
     private UtilsRegistration utilsRegistration;
     private UtilsUserAuthorization utilsUserAuth;
 

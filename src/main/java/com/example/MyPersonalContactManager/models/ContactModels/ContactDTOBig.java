@@ -21,14 +21,14 @@ public class ContactDTOBig {
     private String lastName;
     private String email;
     @NotBlank
-    private List<String> phones;
+    private List<Phone> phones;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate birthday;
     private String address;
     private URL photo;
     private LocalDateTime lastUpdateDate;
 
-    public ContactDTOBig(String firstName, String lastName, String email, List<String> phones, LocalDate birthday, String address, URL photo) {
+    public ContactDTOBig(String firstName, String lastName, String email, List<Phone> phones, LocalDate birthday, String address, URL photo) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;

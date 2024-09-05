@@ -1,4 +1,4 @@
-package com.example.MyPersonalContactManager.service;
+package com.example.MyPersonalContactManager.service.interfaces;
 
 import com.example.MyPersonalContactManager.models.UserModels.User;
 import com.example.MyPersonalContactManager.models.UserModels.UserDTOLogin;
@@ -7,7 +7,7 @@ import com.example.MyPersonalContactManager.models.UserModels.UserDTOResponse;
 
 import java.util.List;
 
-public interface InterfaceUserService {
+public interface UserServiceInterface {
 
     UserDTOResponse registerUser(UserDTORegister userDTO);
 

@@ -1,6 +1,7 @@
 package com.example.MyPersonalContactManager.repository;
 
 import com.example.MyPersonalContactManager.models.UserModels.User;
+import com.example.MyPersonalContactManager.repository.interfaces.UserRepositoryInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -11,12 +12,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-public class DatabaseUserRepository implements InterfaceUserRepository<User> {
+public class UserRepositoryImp implements UserRepositoryInterface<User> {
 
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public DatabaseUserRepository(JdbcTemplate jdbcTemplate) {
+    public UserRepositoryImp(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 

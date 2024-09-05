@@ -5,8 +5,8 @@ import com.example.MyPersonalContactManager.models.ContactModels.ContactDTOBig;
 import com.example.MyPersonalContactManager.models.Error;
 import com.example.MyPersonalContactManager.models.RequestResponseModels.RequestBodyClient;
 import com.example.MyPersonalContactManager.models.RequestResponseModels.ResponseAPI;
-import com.example.MyPersonalContactManager.service.DataBaseUserService;
-import com.example.MyPersonalContactManager.service.DatabaseContactService;
+import com.example.MyPersonalContactManager.service.ContactServiceImp;
+import com.example.MyPersonalContactManager.service.UserServiceImp;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,9 +21,9 @@ public class ContactController {
     private ResponseAPI responseAPI;
 
     @Autowired
-    private DatabaseContactService dbContactService;
+    private ContactServiceImp dbContactServiceImp;
     @Autowired
-    private DataBaseUserService dbUserService;
+    private UserServiceImp dbUserService;
 
     @PostMapping(value = "/createContact", consumes = "application/json")
     public ResponseEntity<ResponseAPI> crateContact(@Valid @RequestBody RequestBodyClient requestBodyClient,
@@ -33,7 +33,7 @@ public class ContactController {
             return ResponseEntity.badRequest().body(responseAPI);
         }
         String userId = dbUserService.getUserIdByToken(token);
-        Contact contact = dbContactService.createContact(requestBodyClient.contact, userId);
+        Contact contact = dbContactServiceImp.createContact(requestBodyClient.contact, userId);
         responseAPI = new ResponseAPI();
         responseAPI.response = contact;
         return ResponseEntity.ok(responseAPI);
@@ -49,7 +49,7 @@ public class ContactController {
         }
         boolean userRole = dbUserService.getUserRoleByToken(token);
         String userId = dbUserService.getUserIdByToken(token);
-        Contact contact = dbContactService.getContactById(contactId);
+        Contact contact = dbContactServiceImp.getContactById(contactId);
         if (userId.equals(contact.getOwnerId()) || userRole) {
             responseAPI.response = contact;
         } else {
@@ -74,10 +74,10 @@ public class ContactController {
         if (userId.isEmpty()) {
             responseAPI.response = new Error(403, "Access denied.");
         } else if (userRole) {
-            List<Contact> allContacts = dbContactService.getAllContacts();
+            List<Contact> allContacts = dbContactServiceImp.getAllContacts();
             responseAPI.response = allContacts;
         } else {
-            List<Contact> contactListByUserId = dbContactService.getContactByUserId(userId);
+            List<Contact> contactListByUserId = dbContactServiceImp.getContactByUserId(userId);
             responseAPI.response = contactListByUserId;
         }
 
@@ -96,7 +96,7 @@ public class ContactController {
         boolean userRole = dbUserService.getUserRoleByToken(token);
         responseAPI = new ResponseAPI();
         if (userRole) {
-            ContactDTOBig contactDTOBig = dbContactService.updateContact(id, requestBodyClient.contactDTOBig);
+            ContactDTOBig contactDTOBig = dbContactServiceImp.updateContact(id, requestBodyClient.contactDTOBig);
             responseAPI.response = contactDTOBig;
             return ResponseEntity.ok(responseAPI);
         } else {
@@ -106,6 +106,7 @@ public class ContactController {
     }
 
     @DeleteMapping("contacts/delete")
+
     public ResponseEntity<ResponseAPI> deleteContactById(@RequestHeader("Contact-Id") String contactId,
                                                          @RequestHeader("token") String token) {
         responseAPI = new ResponseAPI();
@@ -116,10 +117,10 @@ public class ContactController {
 
         boolean userRole = dbUserService.getUserRoleByToken(token);
         String userId = dbUserService.getUserIdByToken(token);
-        Contact contact = dbContactService.getContactById(contactId);
+        Contact contact = dbContactServiceImp.getContactById(contactId);
         boolean isDeleted;
         if (userId.equals(contact.getOwnerId()) || userRole) {
-            isDeleted = dbContactService.deleteContactById(contactId);
+            isDeleted = dbContactServiceImp.deleteContactById(contactId);
             responseAPI.response = isDeleted;
         } else {
             responseAPI.response = new Error(403, "Access denied.");

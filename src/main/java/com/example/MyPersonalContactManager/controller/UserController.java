@@ -7,7 +7,7 @@ import com.example.MyPersonalContactManager.models.Error;
 import com.example.MyPersonalContactManager.models.UserModels.UserDTOLogin;
 import com.example.MyPersonalContactManager.models.UserModels.UserDTORegister;
 import com.example.MyPersonalContactManager.models.UserModels.UserDTOResponse;
-import com.example.MyPersonalContactManager.service.InterfaceUserService;
+import com.example.MyPersonalContactManager.service.interfaces.UserServiceInterface;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/users")
 public class UserController {
 
-    public final InterfaceUserService dbUserService;
+    public final UserServiceInterface dbUserService;
 
 
     @PostMapping(value = "/userRegistration", consumes = "application/json")

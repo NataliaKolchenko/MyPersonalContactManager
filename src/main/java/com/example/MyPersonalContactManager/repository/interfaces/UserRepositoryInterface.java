@@ -1,8 +1,8 @@
-package com.example.MyPersonalContactManager.repository;
+package com.example.MyPersonalContactManager.repository.interfaces;
 
 import java.util.List;
 
-public interface InterfaceUserRepository<T> {
+public interface UserRepositoryInterface<T> {
 
     T createUser(T user);
 
