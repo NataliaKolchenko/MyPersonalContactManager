@@ -53,7 +53,7 @@ public class JdbcContactRepositoryImp implements ContactRepositoryInterface<Cont
 
     private final RowMapper<Phone> phoneRowMapper = (rs, rowNum) -> {
         Phone phone = new Phone();
-        phone.setId(rs.getString("id"));
+        phone.setId(Long.valueOf(rs.getString("id")));
         phone.setPhoneNumber(rs.getString("Phone_Number"));
         phone.setCreateDate(rs.getTimestamp("Create_Date").toLocalDateTime());
         phone.setLastUpdateDate(rs.getTimestamp("Last_Update_Date").toLocalDateTime());

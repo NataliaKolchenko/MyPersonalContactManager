@@ -21,8 +21,10 @@ import static com.example.MyPersonalContactManager.utils.ConstantsContact.DEFAUL
 @Setter
 @Entity
 @Table(name = "Contacts")
+@SecondaryTable(name = "Contacts_Phones")
 public class Contact {
     @Id
+    @Column(name = "id")
     private String id;
     @Column(name = "First_Name")
     @NotBlank

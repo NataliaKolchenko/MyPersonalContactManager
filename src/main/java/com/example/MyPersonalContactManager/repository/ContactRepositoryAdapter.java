@@ -5,6 +5,7 @@ import com.example.MyPersonalContactManager.models.ContactModels.ContactDTOBig;
 import com.example.MyPersonalContactManager.models.ContactModels.Phone;
 import com.example.MyPersonalContactManager.repository.interfaces.ContactRepositoryInterface;
 import com.example.MyPersonalContactManager.repository.interfaces.JpaContactRepositoryInterface;
+import com.example.MyPersonalContactManager.repository.interfaces.JpaPhoneRepositoryInterface;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
@@ -18,6 +19,7 @@ import java.util.Optional;
 public class ContactRepositoryAdapter implements ContactRepositoryInterface<Optional<Contact>, String> {
 
     private final JpaContactRepositoryInterface jpaContactRepository;
+    private final JpaPhoneRepositoryInterface jpaPhoneRepository;
 
 
     @Override
@@ -53,7 +55,6 @@ public class ContactRepositoryAdapter implements ContactRepositoryInterface<Opti
 
     @Override
     public List<Phone> getPhoneListByContactId(String contactId) {
-
         return jpaContactRepository.findPhoneListByContactId(contactId);
     }
 
@@ -63,11 +64,11 @@ public class ContactRepositoryAdapter implements ContactRepositoryInterface<Opti
     }
 
     @Override
-    public List<Phone> createPhone(List<Phone> phones, String id) {
-        Optional<Contact> contact = jpaContactRepository.findById(id);
-        contact.get().setId(id);
-        contact.get().getPhones().addAll(phones);
-        jpaContactRepository.flush();
+    public List<Phone> createPhone(List<Phone> phones, String contactId) {
+        for (Phone phone : phones) {
+            phone.setContactId(contactId);
+        }
+        jpaPhoneRepository.saveAll(phones);
         return phones;
     }
 

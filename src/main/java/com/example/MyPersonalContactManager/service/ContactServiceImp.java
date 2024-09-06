@@ -51,6 +51,7 @@ public class ContactServiceImp implements ContactServiceInterface<Contact, Conta
         Contact tempContact = contactRepository.createContact(contact, userID);
         List<Phone> phoneList = contactRepository.createPhone(contact.getPhones(), tempContact.getId());
         tempContact.setPhones(phoneList);
+//        tempContact = contactRepository.createContact(contact, userID);
         return tempContact;
     }
 
