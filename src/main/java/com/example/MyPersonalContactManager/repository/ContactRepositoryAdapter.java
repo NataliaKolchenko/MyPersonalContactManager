@@ -11,12 +11,11 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Primary
 @Repository
 @RequiredArgsConstructor
-public class ContactRepositoryAdapter implements ContactRepositoryInterface<Optional<Contact>, String> {
+public class ContactRepositoryAdapter implements ContactRepositoryInterface<Contact, String> {
 
     private final JpaContactRepositoryInterface jpaContactRepository;
     private final JpaPhoneRepositoryInterface jpaPhoneRepository;
@@ -29,8 +28,8 @@ public class ContactRepositoryAdapter implements ContactRepositoryInterface<Opti
     }
 
     @Override
-    public Optional<Contact> getContactByContactId(String id) {
-        return jpaContactRepository.findById(id);
+    public Contact getContactByContactId(String id) {
+        return jpaContactRepository.findById(id).get();
     }
 
     @Override
