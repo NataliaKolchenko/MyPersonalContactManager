@@ -4,7 +4,6 @@ import com.example.MyPersonalContactManager.utils.UtilsContact;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -33,10 +32,7 @@ public class Contact {
     private String lastName;
     @Column(name = "Email")
     private String email;
-    @NotEmpty
     @OneToMany(mappedBy = "contactId", cascade = CascadeType.ALL)
-//    @JoinColumn(name = "Contact_Id")
-    // orphanRemoval = true
     private List<Phone> phones;
     @Column(name = "Birth_Day")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
