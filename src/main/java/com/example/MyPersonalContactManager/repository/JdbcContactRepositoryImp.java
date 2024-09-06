@@ -15,6 +15,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.List;
 
+//@Primary
 @Repository
 public class JdbcContactRepositoryImp implements ContactRepositoryInterface<Contact, ContactDTOBig> {
 

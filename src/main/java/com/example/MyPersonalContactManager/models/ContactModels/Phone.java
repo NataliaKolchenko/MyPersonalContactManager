@@ -16,6 +16,8 @@ import java.time.LocalDateTime;
 public class Phone {
     @Id
     private String id;
+    @Column(name = "Contact_Id")
+    private String contactId;
     @Column(name = "Phone_Number")
     private String phoneNumber;
     @Column(name = "Create_Date")

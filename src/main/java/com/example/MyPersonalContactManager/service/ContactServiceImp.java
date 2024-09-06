@@ -3,7 +3,6 @@ package com.example.MyPersonalContactManager.service;
 import com.example.MyPersonalContactManager.models.ContactModels.Contact;
 import com.example.MyPersonalContactManager.models.ContactModels.ContactDTOBig;
 import com.example.MyPersonalContactManager.models.ContactModels.Phone;
-import com.example.MyPersonalContactManager.repository.JdbcContactRepositoryImp;
 import com.example.MyPersonalContactManager.repository.interfaces.ContactRepositoryInterface;
 import com.example.MyPersonalContactManager.service.interfaces.ContactServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +12,9 @@ import java.util.List;
 
 @Component
 public class ContactServiceImp implements ContactServiceInterface<Contact, ContactDTOBig> {
-    public ContactServiceImp(JdbcContactRepositoryImp contactRepository) {
-        this.contactRepository = contactRepository;
-    }
+//    public ContactServiceImp(JdbcContactRepositoryImp contactRepository) {
+//        this.contactRepository = contactRepository;
+//    }
 
     @Autowired
     private ContactRepositoryInterface contactRepository;
@@ -41,7 +40,7 @@ public class ContactServiceImp implements ContactServiceInterface<Contact, Conta
     public List<Contact> getAllContacts() {
         List<Contact> tempListAllContacts = contactRepository.getAllContacts();
         for (int i = 0; i < tempListAllContacts.size(); i++) {
-            List<Phone> phoneList = contactRepository.getPhoneListByContactId(tempListAllContacts.get(i).getId());
+            List phoneList = contactRepository.getPhoneListByContactId(tempListAllContacts.get(i).getId());
             tempListAllContacts.get(i).setPhones(phoneList);
         }
         return tempListAllContacts;

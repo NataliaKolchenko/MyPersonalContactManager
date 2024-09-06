@@ -32,8 +32,9 @@ public class Contact {
     @Column(name = "Email")
     private String email;
     @NotEmpty
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "Contact_Id")
+    @OneToMany(mappedBy = "contactId", cascade = CascadeType.ALL)
+//    @JoinColumn(name = "Contact_Id")
+    // orphanRemoval = true
     private List<Phone> phones;
     @Column(name = "Birth_Day")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
