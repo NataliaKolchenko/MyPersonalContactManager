@@ -47,8 +47,9 @@ public class ContactRepositoryAdapter implements ContactRepositoryInterface<Cont
     }
 
     @Override
-    public boolean deleteContactById(String id) {
-        jpaContactRepository.deleteById(id);
+    public boolean deleteContactById(String contactId) {
+//        jpaPhoneRepository.deletePhonesByContactId(contactId);
+        jpaContactRepository.deleteById(contactId);
         return true;
     }
 
@@ -64,9 +65,9 @@ public class ContactRepositoryAdapter implements ContactRepositoryInterface<Cont
 
     @Override
     public List<Phone> createPhone(List<Phone> phones, String contactId) {
-        for (Phone phone : phones) {
-            phone.setContactId(contactId);
-        }
+//        for (Phone phone : phones) {
+//            phone.setContactId(contactId);
+//        }
         jpaPhoneRepository.saveAll(phones);
         return phones;
     }

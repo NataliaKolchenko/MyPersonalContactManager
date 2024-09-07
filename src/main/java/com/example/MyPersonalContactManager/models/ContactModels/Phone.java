@@ -15,12 +15,16 @@ public class Phone {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
+
     @Column(name = "Contact_Id")
     private String contactId;
+
     @Column(name = "Phone_Number")
     private String phoneNumber;
+
     @Column(name = "Create_Date")
     private LocalDateTime createDate;
+
     @Column(name = "Last_Update_Date")
     private LocalDateTime lastUpdateDate;
 

@@ -25,26 +25,36 @@ public class Contact {
     @Id
     @Column(name = "id")
     private String id;
+
     @Column(name = "First_Name")
     @NotBlank
     private String firstName;
+
     @Column(name = "Last_Name")
     private String lastName;
+
     @Column(name = "Email")
     private String email;
+
     @OneToMany(mappedBy = "contactId", cascade = CascadeType.ALL)
     private List<Phone> phones;
+
     @Column(name = "Birth_Day")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate birthday;
+
     @Column(name = "Address")
     private String address;
+
     @Column(name = "Photo")
     private URL photo;
+
     @Column(name = "Owner_Id")
     private String ownerId;
+
     @Column(name = "Create_Date")
     private LocalDateTime createDate;
+
     @Column(name = "Last_Update_Date")
     @Setter
     private LocalDateTime lastUpdateDate;
