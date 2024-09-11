@@ -43,6 +43,7 @@ public class ContactRepositoryAdapter implements ContactRepositoryInterface<Cont
         jpaContactRepository.save(contact);
         ContactDTOBig dto = toDTOBig(contact);
         return dto;
+
     }
 
     @Override
