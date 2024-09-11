@@ -20,7 +20,6 @@ import static com.example.MyPersonalContactManager.utils.ConstantsContact.DEFAUL
 @Setter
 @Entity
 @Table(name = "Contacts")
-@SecondaryTable(name = "Contacts_Phones")
 public class Contact {
     @Id
     @Column(name = "id")
@@ -36,7 +35,8 @@ public class Contact {
     @Column(name = "Email")
     private String email;
 
-    @OneToMany(mappedBy = "contactId", cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "contactId")
     private List<Phone> phones;
 
     @Column(name = "Birth_Day")
@@ -79,7 +79,6 @@ public class Contact {
         this.lastUpdateDate = LocalDateTime.now();
     }
 
-    //COPY CODE
     public LocalDate getBirthday(LocalDate birthday) {
         UtilsContact utilsContact = new UtilsContact();
         if (utilsContact.isBirthdayDefault(this.birthday)) {
@@ -88,7 +87,6 @@ public class Contact {
         return this.birthday;
     }
 
-    //COPY CODE
     public void setBirthday(LocalDate birthday) {
         UtilsContact utilsContact = new UtilsContact();
 

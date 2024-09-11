@@ -1,11 +1,11 @@
 package com.example.MyPersonalContactManager.repository;
 
+import com.example.MyPersonalContactManager.exceptions.ContactNotFoundException;
 import com.example.MyPersonalContactManager.models.ContactModels.Contact;
 import com.example.MyPersonalContactManager.models.ContactModels.ContactDTOBig;
 import com.example.MyPersonalContactManager.models.ContactModels.Phone;
 import com.example.MyPersonalContactManager.repository.interfaces.ContactRepositoryInterface;
 import com.example.MyPersonalContactManager.repository.interfaces.JpaContactRepositoryInterface;
-import com.example.MyPersonalContactManager.repository.interfaces.JpaPhoneRepositoryInterface;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
@@ -18,7 +18,6 @@ import java.util.List;
 public class ContactRepositoryAdapter implements ContactRepositoryInterface<Contact, String> {
 
     private final JpaContactRepositoryInterface jpaContactRepository;
-    private final JpaPhoneRepositoryInterface jpaPhoneRepository;
 
 
     @Override
@@ -48,28 +47,26 @@ public class ContactRepositoryAdapter implements ContactRepositoryInterface<Cont
 
     @Override
     public boolean deleteContactById(String contactId) {
-//        jpaPhoneRepository.deletePhonesByContactId(contactId);
-        jpaContactRepository.deleteById(contactId);
+        Contact contact = jpaContactRepository.findById(contactId)
+                .orElseThrow(() -> new ContactNotFoundException("Incorrect contact id"));
+        jpaContactRepository.delete(contact);
+
         return true;
     }
 
-    @Override
-    public List<Phone> getPhoneListByContactId(String contactId) {
-        return jpaContactRepository.findPhoneListByContactId(contactId);
-    }
 
     @Override
     public List<Contact> getContactByUserId(String userId) {
         return null;
     }
 
-    @Override
-    public List<Phone> createPhone(List<Phone> phones, String contactId) {
-//        for (Phone phone : phones) {
-//            phone.setContactId(contactId);
-//        }
-        jpaPhoneRepository.saveAll(phones);
-        return phones;
+
+    public void createPhone(Phone phone, String contactId) {
+        Contact contact = jpaContactRepository.findById(contactId)
+                .orElseThrow(() -> new ContactNotFoundException("Incorrect contact id"));
+        List<Phone> phones = contact.getPhones();
+        phones.add(phone);
+        jpaContactRepository.save(contact);
     }
 
     private Contact toEntity(ContactDTOBig contactDTO) {

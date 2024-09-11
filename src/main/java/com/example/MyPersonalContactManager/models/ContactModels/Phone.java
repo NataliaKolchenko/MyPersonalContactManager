@@ -16,9 +16,6 @@ public class Phone {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "Contact_Id")
-    private String contactId;
-
     @Column(name = "Phone_Number")
     private String phoneNumber;
 
