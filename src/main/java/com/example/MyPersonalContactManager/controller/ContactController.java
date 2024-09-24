@@ -5,20 +5,14 @@ import com.example.MyPersonalContactManager.models.ContactModels.ContactDTOBig;
 import com.example.MyPersonalContactManager.models.Error;
 import com.example.MyPersonalContactManager.models.RequestResponseModels.RequestBodyClient;
 import com.example.MyPersonalContactManager.models.RequestResponseModels.ResponseAPI;
-import com.example.MyPersonalContactManager.models.UserModels.User;
 import com.example.MyPersonalContactManager.service.ContactServiceImp;
 import com.example.MyPersonalContactManager.service.UserServiceImp;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collection;
 import java.util.List;
 
 @RestController
@@ -70,28 +64,20 @@ public class ContactController {
     @GetMapping(value = "/contacts")
     public ResponseEntity<ResponseAPI> getAllContacts(HttpServletRequest request) {
         responseAPI = new ResponseAPI();
-        // Извлекаем информацию о текущем пользователе // Получаем текущую аутентификацию
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        // Извлечение ролей (userRoles)
-        Collection<? extends GrantedAuthority> roles = authentication.getAuthorities();
-        List<String> userRoles = roles.stream()
-                .map(GrantedAuthority::getAuthority)
-                .toList();
-
-        System.out.println(userRoles);
-
-        // Извлекаем информацию о пользователе
-        Object principal = authentication.getPrincipal();
-        String userId = null;
-        if (principal instanceof UserDetails) {
-            // Пример получения userId, если он хранится в UserDetails
-            userId = ((User) principal).getUserId();
-        } else {
-            // Если principal — это просто имя пользователя (например, если не используется UserDetails)
-            userId = principal.toString();
+        // Извлекаем JWT-токен из заголовка Authorization
+        String authHeader = request.getHeader("Authorization");
+        String token = null;
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            token = authHeader.substring(7); // Убираем "Bearer " из строки
         }
-        System.out.println(userId);
+
+        if (token != null) {
+            // Извлечение userId из токена
+            int userId = dbUserService.extractUserIdFromToken(token);
+            System.out.println("UserId: " + userId);
+        } else {
+            System.out.println("JWT токен не найден в запросе.");
+        }
 
         List<Contact> allContacts = dbContactServiceImp.getAllContacts();
 

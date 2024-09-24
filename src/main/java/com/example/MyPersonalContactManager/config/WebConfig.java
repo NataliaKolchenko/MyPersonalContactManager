@@ -6,7 +6,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -33,7 +32,7 @@ public class WebConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable) // Отключение CSRF для упрощения (в продакшене нужно включить)
+//                .csrf(AbstractHttpConfigurer::disable) // Отключение CSRF для упрощения (в продакшене нужно включить)
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/MyPersonalContactManager").authenticated() // Требует аутентификации для /contacts
                         .anyRequest().permitAll() // Остальные запросы разрешены для всех

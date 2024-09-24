@@ -11,9 +11,12 @@ import com.example.MyPersonalContactManager.repository.interfaces.UserRepository
 import com.example.MyPersonalContactManager.service.interfaces.UserServiceInterface;
 import com.example.MyPersonalContactManager.utils.UtilsRegistration;
 import com.example.MyPersonalContactManager.utils.UtilsUserAuthorization;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Base64;
 import java.util.List;
 
 @Service
@@ -23,6 +26,24 @@ public class UserServiceImp implements UserServiceInterface {
     private final UserRepositoryInterface<User> userRepository;
     private UtilsRegistration utilsRegistration;
     private UtilsUserAuthorization utilsUserAuth;
+
+    public int extractUserIdFromToken(String token) {
+        // Проверяем строку и дополняем недостающими символами =, если нужно
+        String secretKey = "5Hdo5+PxMJkLQ9Wo7WnYMR/gBzTfC5XrB3iNPvMlscY=";
+        if (secretKey.length() % 4 != 0) {
+            secretKey = secretKey + "=".repeat(4 - (secretKey.length() % 4)); // Добавляем = для выравнивания длины
+        }
+
+        // Декодируем Base64-строку в байтовый массив
+        byte[] secretKeyBytes = Base64.getDecoder().decode(secretKey);
+
+        Claims claims = Jwts.parser()
+                .setSigningKey(secretKeyBytes) // Передаем байтовый массив
+                .parseClaimsJws(token)
+                .getBody();
+
+        return (int) claims.get("userId");
+    }
 
     @Override
     public UserDTOResponse registerUser(UserDTORegister userDTORegister) {
