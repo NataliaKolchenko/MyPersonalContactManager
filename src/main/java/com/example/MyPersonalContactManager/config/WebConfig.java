@@ -35,7 +35,7 @@ public class WebConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable) // Отключение CSRF для упрощения (в продакшене нужно включить)
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/contacts").authenticated() // Требует аутентификации для /contacts
+                        .requestMatchers("/MyPersonalContactManager").authenticated() // Требует аутентификации для /contacts
                         .anyRequest().permitAll() // Остальные запросы разрешены для всех
                 );
 //                .httpBasic(); // Использование Basic Authentication
