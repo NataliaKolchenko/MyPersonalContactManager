@@ -1,13 +1,11 @@
 package com.example.MyPersonalContactManager.controller;
 
-import com.example.MyPersonalContactManager.infrastructure.AuthInterceptor;
 import com.example.MyPersonalContactManager.models.ContactModels.Contact;
 import com.example.MyPersonalContactManager.models.ContactModels.ContactDTOBig;
 import com.example.MyPersonalContactManager.models.Error;
 import com.example.MyPersonalContactManager.models.RequestResponseModels.RequestBodyClient;
 import com.example.MyPersonalContactManager.models.RequestResponseModels.ResponseAPI;
 import com.example.MyPersonalContactManager.service.ContactServiceImp;
-import com.example.MyPersonalContactManager.service.TokenValidationService;
 import com.example.MyPersonalContactManager.service.UserServiceImp;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -27,10 +25,10 @@ public class ContactController {
     private ContactServiceImp dbContactServiceImp;
     @Autowired
     private UserServiceImp dbUserService;
-    @Autowired
-    private AuthInterceptor authInterceptor;
-    @Autowired
-    private TokenValidationService tokenValidator;
+//    @Autowired
+//    private AuthInterceptor authInterceptor;
+//    @Autowired
+//    private TokenValidationService tokenValidator;
 
     @PostMapping(value = "/createContact", consumes = "application/json")
     public ResponseEntity<ResponseAPI> crateContact(@Valid @RequestBody RequestBodyClient requestBodyClient,
@@ -70,18 +68,7 @@ public class ContactController {
     @GetMapping(value = "/contacts")
     public ResponseEntity<ResponseAPI> getAllContacts(HttpServletRequest request) {
         responseAPI = new ResponseAPI();
-
-        String token = authInterceptor.getTokenExtraction(request);
-        boolean checkTokenValidation = tokenValidator.validateToken(token);
-        if (!checkTokenValidation)
-            responseAPI.response = new Error(401, "Unauthorized");
-
-
-        int userId = authInterceptor.extractUserIdFromToken(token);
-        System.out.println("UserId: " + userId);
-
-
-        List<Contact> allContacts = dbContactServiceImp.getAllContacts();
+        List<Contact> allContacts = dbContactServiceImp.getAllContacts(request);
 
 //        boolean userRole = dbUserService.getUserRoleByToken(token);
 //        String userId = dbUserService.getUserIdByToken(token);

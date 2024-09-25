@@ -26,7 +26,7 @@ public class TokenValidationService {
 
         } catch (JwtException | IllegalArgumentException e) {
             // Если токен недействителен или подпись неверна
-            System.out.println("Неверный JWT токен: " + e.getMessage());
+            e.getMessage();
             return false;
         }
     }

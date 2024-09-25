@@ -1,9 +1,11 @@
 package com.example.MyPersonalContactManager.service;
 
+import com.example.MyPersonalContactManager.infrastructure.AuthInterceptor;
 import com.example.MyPersonalContactManager.models.ContactModels.Contact;
 import com.example.MyPersonalContactManager.models.ContactModels.ContactDTOBig;
 import com.example.MyPersonalContactManager.repository.interfaces.ContactRepositoryInterface;
 import com.example.MyPersonalContactManager.service.interfaces.ContactServiceInterface;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +16,10 @@ public class ContactServiceImp implements ContactServiceInterface<Contact, Conta
 
     @Autowired
     private ContactRepositoryInterface contactRepository;
+    @Autowired
+    private AuthInterceptor authInterceptor;
+    @Autowired
+    private TokenValidationService tokenValidator;
 
     @Override
     public Contact getContactById(String contactId) {
@@ -27,7 +33,15 @@ public class ContactServiceImp implements ContactServiceInterface<Contact, Conta
     }
 
     @Override
-    public List<Contact> getAllContacts() {
+    public List<Contact> getAllContacts(HttpServletRequest request) {
+        String token = authInterceptor.getTokenExtraction(request);
+        boolean checkTokenValidation = tokenValidator.validateToken(token);
+//        if (!checkTokenValidation)
+//            responseAPI.response = new Error(401, "Unauthorized");
+
+
+        int userId = authInterceptor.extractUserIdFromToken(token);
+        System.out.println("UserId: " + userId);
         List<Contact> tempListAllContacts = contactRepository.getAllContacts();
         return tempListAllContacts;
     }
