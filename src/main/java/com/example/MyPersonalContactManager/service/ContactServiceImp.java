@@ -33,8 +33,21 @@ public class ContactServiceImp implements ContactServiceInterface<Contact, Conta
         return tempContact;
     }
 
+    //        boolean userRole = dbUserService.getUserRoleByToken(token);
+//        String userId = dbUserService.getUserIdByToken(token);
+
+    //        if (userId.isEmpty()) {
+//            responseAPI.response = new Error(403, "Access denied.");
+//        } else if (userRole) {
+//
+//            responseAPI.response = allContacts;
+//        } else {
+//
+//            responseAPI.response = contactListByUserId;
+//        }
     @Override
     public List<Contact> getAllContacts(HttpServletRequest request) {
+        List tempListAllContacts;
         String token = authInterceptor.getTokenExtraction(request);
         boolean checkTokenValidation = tokenValidator.validateToken(token);
         if (!checkTokenValidation) {
@@ -42,8 +55,12 @@ public class ContactServiceImp implements ContactServiceInterface<Contact, Conta
         }
 
         int userId = authInterceptor.extractUserIdFromToken(token);
-//        System.out.println("UserId: " + userId);
-        List<Contact> tempListAllContacts = contactRepository.getAllContacts();
+        String userRole = authInterceptor.extractUserRoleFromToken(token);
+        if (userRole.equals("ADMIN")) {
+            tempListAllContacts = contactRepository.getAllContacts();
+        } else {
+            tempListAllContacts = contactRepository.getContactByUserId(String.valueOf(userId));
+        }
         return tempListAllContacts;
     }
 

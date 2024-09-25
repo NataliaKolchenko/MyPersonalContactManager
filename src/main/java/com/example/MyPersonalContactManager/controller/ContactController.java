@@ -73,21 +73,6 @@ public class ContactController {
             responseAPI.response = new Error(401, e.getMessage());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseAPI);
         }
-
-//        boolean userRole = dbUserService.getUserRoleByToken(token);
-//        String userId = dbUserService.getUserIdByToken(token);
-
-//        if (userId.isEmpty()) {
-//            responseAPI.response = new Error(403, "Access denied.");
-//        } else if (userRole) {
-//            List<Contact> allContacts = dbContactServiceImp.getAllContacts();
-//            responseAPI.response = allContacts;
-//        } else {
-//            List<Contact> contactListByUserId = dbContactServiceImp.getContactByUserId(userId);
-//            responseAPI.response = contactListByUserId;
-//        }
-
-//        return ResponseEntity.ok(responseAPI);
     }
 
     @PutMapping(value = "/updateContact/{id}", consumes = "application/json")

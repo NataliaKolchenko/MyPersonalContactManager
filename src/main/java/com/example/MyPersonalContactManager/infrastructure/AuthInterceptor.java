@@ -33,12 +33,12 @@ public class AuthInterceptor {
         return (int) claims.get("userId");
     }
 
-    public boolean extractUserRoleFromToken(String token) {
+    public String extractUserRoleFromToken(String token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(secretKeyBytes)
                 .parseClaimsJws(token)
                 .getBody();
-        return (boolean) claims.get("role");
+        return (String) claims.get("role");
     }
 }
 
