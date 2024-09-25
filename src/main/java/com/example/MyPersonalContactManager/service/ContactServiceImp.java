@@ -42,7 +42,7 @@ public class ContactServiceImp implements ContactServiceInterface<Contact, Conta
         }
 
         int userId = authInterceptor.extractUserIdFromToken(token);
-        System.out.println("UserId: " + userId);
+//        System.out.println("UserId: " + userId);
         List<Contact> tempListAllContacts = contactRepository.getAllContacts();
         return tempListAllContacts;
     }
