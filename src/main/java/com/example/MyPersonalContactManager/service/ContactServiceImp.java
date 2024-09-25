@@ -1,5 +1,6 @@
 package com.example.MyPersonalContactManager.service;
 
+import com.example.MyPersonalContactManager.exceptions.AccessDeniedDeleteContactException;
 import com.example.MyPersonalContactManager.exceptions.ValidateTokenException;
 import com.example.MyPersonalContactManager.infrastructure.AuthInterceptor;
 import com.example.MyPersonalContactManager.models.ContactModels.Contact;
@@ -94,7 +95,8 @@ public class ContactServiceImp implements ContactServiceInterface<Contact, Conta
         if ((String.valueOf(userId)).equals(contact.getOwnerId()) || (userRole.equals("ADMIN"))) {
             isDeleted = contactRepository.deleteContactById(contactId);
         } else {
-            isDeleted = false;
+
+            throw new AccessDeniedDeleteContactException("Access Denied");
         }
 
         return isDeleted;
