@@ -34,7 +34,7 @@ public class ContactServiceImp implements ContactServiceInterface<Contact, Conta
         return tempContact;
     }
 
-    public List<Contact> getContactByUserId(String userId) {
+    private List<Contact> getContactByUserId(String userId) {
         List<Contact> tempContact = contactRepository.getContactByUserId(userId);
         return tempContact;
     }
