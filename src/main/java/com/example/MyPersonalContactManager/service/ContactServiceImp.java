@@ -56,6 +56,7 @@ public class ContactServiceImp implements ContactServiceInterface<Contact, Conta
 
         int userId = authInterceptor.extractUserIdFromToken(token);
         String userRole = authInterceptor.extractUserRoleFromToken(token);
+        System.out.println(userRole);
         if (userRole.equals("ADMIN")) {
             tempListAllContacts = contactRepository.getAllContacts();
         } else {
