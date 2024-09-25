@@ -23,7 +23,13 @@ public class ContactServiceImp implements ContactServiceInterface<Contact, Conta
     private TokenValidationService tokenValidator;
 
     @Override
-    public Contact getContactById(String contactId) {
+    public Contact getContactById(HttpServletRequest request, String contactId) {
+        String token = authInterceptor.getTokenExtraction(request);
+        boolean checkTokenValidation = tokenValidator.validateToken(token);
+        if (!checkTokenValidation) {
+            throw new ValidateTokenException("Unauthorized: Invalid or missing token");
+        }
+
         Contact tempContact = (Contact) contactRepository.getContactByContactId(contactId);
         return tempContact;
     }

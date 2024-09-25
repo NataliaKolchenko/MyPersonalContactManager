@@ -6,6 +6,8 @@ import com.example.MyPersonalContactManager.models.ContactModels.ContactDTOBig;
 import com.example.MyPersonalContactManager.models.ContactModels.Phone;
 import com.example.MyPersonalContactManager.repository.interfaces.ContactRepositoryInterface;
 import com.example.MyPersonalContactManager.repository.interfaces.JpaContactRepositoryInterface;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
@@ -18,6 +20,8 @@ import java.util.List;
 public class ContactRepositoryAdapter implements ContactRepositoryInterface<Contact, String> {
 
     private final JpaContactRepositoryInterface jpaContactRepository;
+    @PersistenceContext
+    private EntityManager entityManager;
 
 
     @Override
@@ -58,7 +62,11 @@ public class ContactRepositoryAdapter implements ContactRepositoryInterface<Cont
 
     @Override
     public List<Contact> getContactByUserId(String userId) {
-        return null;
+        return entityManager.createQuery(
+                        "FROM Contact e WHERE e.ownerId = :userId",
+                        Contact.class)
+                .setParameter("userId", userId)
+                .getResultList();
     }
 
 

@@ -5,7 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface ContactServiceInterface<T, U> {
-    T getContactById(String id);
+    T getContactById(HttpServletRequest request, String id);
 
     List<T> getAllContacts(HttpServletRequest request);
 
