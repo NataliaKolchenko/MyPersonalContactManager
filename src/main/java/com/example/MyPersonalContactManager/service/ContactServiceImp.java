@@ -80,8 +80,23 @@ public class ContactServiceImp implements ContactServiceInterface<Contact, Conta
 
     @Override
     public boolean deleteContactById(HttpServletRequest request, String contactId) {
+        String token = authInterceptor.getTokenExtraction(request);
+        boolean checkTokenValidation = tokenValidator.validateToken(token);
+        if (!checkTokenValidation) {
+            throw new ValidateTokenException("Unauthorized: Invalid or missing token");
+        }
 
-        contactRepository.deleteContactById(contactId);
-        return true;
+        int userId = authInterceptor.extractUserIdFromToken(token);
+        String userRole = authInterceptor.extractUserRoleFromToken(token);
+        Contact contact = (Contact) contactRepository.getContactByContactId(contactId);
+        boolean isDeleted;
+
+        if ((String.valueOf(userId)).equals(contact.getOwnerId()) || (userRole.equals("ADMIN"))) {
+            isDeleted = contactRepository.deleteContactById(contactId);
+        } else {
+            isDeleted = false;
+        }
+
+        return isDeleted;
     }
 }
