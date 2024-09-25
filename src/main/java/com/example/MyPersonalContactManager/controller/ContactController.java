@@ -7,6 +7,7 @@ import com.example.MyPersonalContactManager.models.Error;
 import com.example.MyPersonalContactManager.models.RequestResponseModels.RequestBodyClient;
 import com.example.MyPersonalContactManager.models.RequestResponseModels.ResponseAPI;
 import com.example.MyPersonalContactManager.service.ContactServiceImp;
+import com.example.MyPersonalContactManager.service.TokenValidationService;
 import com.example.MyPersonalContactManager.service.UserServiceImp;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -28,6 +29,8 @@ public class ContactController {
     private UserServiceImp dbUserService;
     @Autowired
     private AuthInterceptor authInterceptor;
+    @Autowired
+    private TokenValidationService tokenValidator;
 
     @PostMapping(value = "/createContact", consumes = "application/json")
     public ResponseEntity<ResponseAPI> crateContact(@Valid @RequestBody RequestBodyClient requestBodyClient,
@@ -69,6 +72,9 @@ public class ContactController {
         responseAPI = new ResponseAPI();
 
         String token = authInterceptor.getTokenExtraction(request);
+        boolean checkTokenValidation = tokenValidator.validateToken(token);
+        if (!checkTokenValidation)
+            responseAPI.response = new Error(401, "Unauthorized");
 
         if (token != null) {
             // Извлечение userId из токена

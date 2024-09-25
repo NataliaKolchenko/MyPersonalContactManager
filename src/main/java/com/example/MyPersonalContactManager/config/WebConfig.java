@@ -13,19 +13,6 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
-//public class WebConfig implements WebMvcConfigurer {
-//    private final AuthenticationInterceptor authenticationInterceptor;
-//
-//    public WebConfig(AuthenticationInterceptor authenticationInterceptor) {
-//        this.authenticationInterceptor = authenticationInterceptor;
-//    }
-//
-//    @Override
-//    public void addInterceptors(InterceptorRegistry registry) {
-//        registry.addInterceptor(authenticationInterceptor)
-//                .addPathPatterns("/MyPersonalContactManager/**");
-//    }
-//}
 
 public class WebConfig {
 

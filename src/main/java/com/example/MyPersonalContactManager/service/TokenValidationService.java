@@ -1,24 +1,33 @@
 package com.example.MyPersonalContactManager.service;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
+
+import java.util.Base64;
+import java.util.Date;
 
 @Service
 public class TokenValidationService {
-    private final WebClient webClient;
-
-    public TokenValidationService(WebClient.Builder webClientBuilder) {
-        this.webClient = webClientBuilder
-                .baseUrl("http://localhost:8080")
-                .build();
-    }
+    private final String secretKey = "5Hdo5+PxMJkLQ9Wo7WnYMR/gBzTfC5XrB3iNPvMlscY=";
 
     public boolean validateToken(String token) {
-        return webClient.post()
-                .uri("/validate-token")
-                .header("Authorization", token)
-                .retrieve()
-                .bodyToMono(Boolean.class)
-                .block();
+        try {
+            // Парсим и проверяем токен с использованием секретного ключа
+            Jws<Claims> claimsJws = Jwts.parser()
+                    .setSigningKey(Base64.getDecoder().decode(secretKey))
+                    .parseClaimsJws(token);
+
+            // Проверяем, что токен не просрочен
+            Date expiration = claimsJws.getBody().getExpiration();
+            return expiration != null && expiration.after(new Date());
+
+        } catch (JwtException | IllegalArgumentException e) {
+            // Если токен недействителен или подпись неверна
+            System.out.println("Неверный JWT токен: " + e.getMessage());
+            return false;
+        }
     }
 }
