@@ -76,13 +76,10 @@ public class ContactController {
         if (!checkTokenValidation)
             responseAPI.response = new Error(401, "Unauthorized");
 
-        if (token != null) {
-            // Извлечение userId из токена
-            int userId = dbUserService.extractUserIdFromToken(token);
-            System.out.println("UserId: " + userId);
-        } else {
-            System.out.println("JWT токен не найден в запросе.");
-        }
+
+        int userId = authInterceptor.extractUserIdFromToken(token);
+        System.out.println("UserId: " + userId);
+
 
         List<Contact> allContacts = dbContactServiceImp.getAllContacts();
 
