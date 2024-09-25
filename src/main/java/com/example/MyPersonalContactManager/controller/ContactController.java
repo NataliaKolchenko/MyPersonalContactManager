@@ -93,11 +93,14 @@ public class ContactController {
         }
     }
 
-//    @DeleteMapping("contacts/delete")
-//
-//    public ResponseEntity<ResponseAPI> deleteContactById(@RequestHeader("Contact-Id") String contactId,
-//                                                         @RequestHeader("token") String token) {
-//        responseAPI = new ResponseAPI();
+    @DeleteMapping("contacts/delete")
+
+    public ResponseEntity<ResponseAPI> deleteContactById(HttpServletRequest request,
+                                                         @RequestHeader("Contact-Id") String contactId) {
+        responseAPI = new ResponseAPI();
+        boolean isDeleted = dbContactServiceImp.deleteContactById(request, contactId);
+        responseAPI.response = isDeleted;
+        return ResponseEntity.ok(responseAPI);
 //        if (token == null || token.isEmpty()) {
 //            responseAPI.response = new Error(400, "Authorization header is missing.");
 //            return ResponseEntity.badRequest().body(responseAPI);
@@ -105,15 +108,15 @@ public class ContactController {
 //
 //        boolean userRole = dbUserService.getUserRoleByToken(token);
 //        String userId = dbUserService.getUserIdByToken(token);
-////        Contact contact = dbContactServiceImp.getContactById(contactId);
+//        Contact contact = dbContactServiceImp.getContactById(contactId);
 //        boolean isDeleted;
 //        if (userId.equals(contact.getOwnerId()) || userRole) {
 //            isDeleted = dbContactServiceImp.deleteContactById(contactId);
-//            responseAPI.response = isDeleted;
+//
 //        } else {
 //            responseAPI.response = new Error(403, "Access denied.");
 //        }
-//
-//        return ResponseEntity.ok(responseAPI);
-//    }
+
+
+    }
 }

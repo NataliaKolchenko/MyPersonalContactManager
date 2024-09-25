@@ -79,7 +79,8 @@ public class ContactServiceImp implements ContactServiceInterface<Contact, Conta
     }
 
     @Override
-    public boolean deleteContactById(String contactId) {
+    public boolean deleteContactById(HttpServletRequest request, String contactId) {
+
         contactRepository.deleteContactById(contactId);
         return true;
     }

@@ -13,5 +13,5 @@ public interface ContactServiceInterface<T, U> {
 
     U updateContact(String id, U newContact);
 
-    boolean deleteContactById(String id);
+    boolean deleteContactById(HttpServletRequest request, String id);
 }
