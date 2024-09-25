@@ -82,7 +82,6 @@ public class ContactController {
     }
 
     @DeleteMapping("contacts/delete")
-
     public ResponseEntity<ResponseAPI> deleteContactById(HttpServletRequest request,
                                                          @RequestHeader("Contact-Id") String contactId) {
         responseAPI = new ResponseAPI();
@@ -94,33 +93,5 @@ public class ContactController {
             responseAPI.response = new Error(403, e.getMessage());
             return ResponseEntity.ok(responseAPI);
         }
-
-
-//        try {
-//            List<Contact> allContacts = dbContactServiceImp.getAllContacts(request);
-//            responseAPI.response = allContacts;
-//            return ResponseEntity.ok(responseAPI);
-//        } catch (ValidateTokenException e) {
-//            responseAPI.response = new Error(401, e.getMessage());
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseAPI);
-//        }
-
-//        if (token == null || token.isEmpty()) {
-//            responseAPI.response = new Error(400, "Authorization header is missing.");
-//            return ResponseEntity.badRequest().body(responseAPI);
-//        }
-//
-//        boolean userRole = dbUserService.getUserRoleByToken(token);
-//        String userId = dbUserService.getUserIdByToken(token);
-//        Contact contact = dbContactServiceImp.getContactById(contactId);
-//        boolean isDeleted;
-//        if (userId.equals(contact.getOwnerId()) || userRole) {
-//            isDeleted = dbContactServiceImp.deleteContactById(contactId);
-//
-//        } else {
-//            responseAPI.response = new Error(403, "Access denied.");
-//        }
-
-
     }
 }
