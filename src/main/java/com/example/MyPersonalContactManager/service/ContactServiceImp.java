@@ -1,5 +1,6 @@
 package com.example.MyPersonalContactManager.service;
 
+import com.example.MyPersonalContactManager.exceptions.ValidateTokenException;
 import com.example.MyPersonalContactManager.infrastructure.AuthInterceptor;
 import com.example.MyPersonalContactManager.models.ContactModels.Contact;
 import com.example.MyPersonalContactManager.models.ContactModels.ContactDTOBig;
@@ -36,9 +37,9 @@ public class ContactServiceImp implements ContactServiceInterface<Contact, Conta
     public List<Contact> getAllContacts(HttpServletRequest request) {
         String token = authInterceptor.getTokenExtraction(request);
         boolean checkTokenValidation = tokenValidator.validateToken(token);
-//        if (!checkTokenValidation)
-//            responseAPI.response = new Error(401, "Unauthorized");
-
+        if (!checkTokenValidation) {
+            throw new ValidateTokenException("Unauthorized: Invalid or missing token");
+        }
 
         int userId = authInterceptor.extractUserIdFromToken(token);
         System.out.println("UserId: " + userId);

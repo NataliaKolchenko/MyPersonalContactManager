@@ -1,5 +1,6 @@
 package com.example.MyPersonalContactManager.controller;
 
+import com.example.MyPersonalContactManager.exceptions.ValidateTokenException;
 import com.example.MyPersonalContactManager.models.ContactModels.Contact;
 import com.example.MyPersonalContactManager.models.ContactModels.ContactDTOBig;
 import com.example.MyPersonalContactManager.models.Error;
@@ -10,6 +11,7 @@ import com.example.MyPersonalContactManager.service.UserServiceImp;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,10 +27,6 @@ public class ContactController {
     private ContactServiceImp dbContactServiceImp;
     @Autowired
     private UserServiceImp dbUserService;
-//    @Autowired
-//    private AuthInterceptor authInterceptor;
-//    @Autowired
-//    private TokenValidationService tokenValidator;
 
     @PostMapping(value = "/createContact", consumes = "application/json")
     public ResponseEntity<ResponseAPI> crateContact(@Valid @RequestBody RequestBodyClient requestBodyClient,
@@ -68,7 +66,13 @@ public class ContactController {
     @GetMapping(value = "/contacts")
     public ResponseEntity<ResponseAPI> getAllContacts(HttpServletRequest request) {
         responseAPI = new ResponseAPI();
-        List<Contact> allContacts = dbContactServiceImp.getAllContacts(request);
+        try {
+            List<Contact> allContacts = dbContactServiceImp.getAllContacts(request);
+            return ResponseEntity.ok(responseAPI);
+        } catch (ValidateTokenException e) {
+            responseAPI.response = new Error(401, e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseAPI);
+        }
 
 //        boolean userRole = dbUserService.getUserRoleByToken(token);
 //        String userId = dbUserService.getUserIdByToken(token);
@@ -83,7 +87,7 @@ public class ContactController {
 //            responseAPI.response = contactListByUserId;
 //        }
 
-        return ResponseEntity.ok(responseAPI);
+//        return ResponseEntity.ok(responseAPI);
     }
 
     @PutMapping(value = "/updateContact/{id}", consumes = "application/json")
