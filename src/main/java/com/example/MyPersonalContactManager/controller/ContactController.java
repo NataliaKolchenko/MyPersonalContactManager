@@ -1,5 +1,6 @@
 package com.example.MyPersonalContactManager.controller;
 
+import com.example.MyPersonalContactManager.infrastructure.AuthInterceptor;
 import com.example.MyPersonalContactManager.models.ContactModels.Contact;
 import com.example.MyPersonalContactManager.models.ContactModels.ContactDTOBig;
 import com.example.MyPersonalContactManager.models.Error;
@@ -25,6 +26,8 @@ public class ContactController {
     private ContactServiceImp dbContactServiceImp;
     @Autowired
     private UserServiceImp dbUserService;
+    @Autowired
+    private AuthInterceptor authInterceptor;
 
     @PostMapping(value = "/createContact", consumes = "application/json")
     public ResponseEntity<ResponseAPI> crateContact(@Valid @RequestBody RequestBodyClient requestBodyClient,
@@ -64,12 +67,8 @@ public class ContactController {
     @GetMapping(value = "/contacts")
     public ResponseEntity<ResponseAPI> getAllContacts(HttpServletRequest request) {
         responseAPI = new ResponseAPI();
-        // Извлекаем JWT-токен из заголовка Authorization
-        String authHeader = request.getHeader("Authorization");
-        String token = null;
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            token = authHeader.substring(7); // Убираем "Bearer " из строки
-        }
+
+        String token = authInterceptor.getTokenExtraction(request);
 
         if (token != null) {
             // Извлечение userId из токена
