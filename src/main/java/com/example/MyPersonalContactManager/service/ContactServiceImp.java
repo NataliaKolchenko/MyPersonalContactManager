@@ -47,7 +47,7 @@ public class ContactServiceImp implements ContactServiceInterface<Contact, Conta
 //        }
     @Override
     public List<Contact> getAllContacts(HttpServletRequest request) {
-        List tempListAllContacts;
+        List<Contact> tempListAllContacts;
         String token = authInterceptor.getTokenExtraction(request);
         boolean checkTokenValidation = tokenValidator.validateToken(token);
         if (!checkTokenValidation) {
@@ -60,15 +60,23 @@ public class ContactServiceImp implements ContactServiceInterface<Contact, Conta
         if (userRole.equals("ADMIN")) {
             tempListAllContacts = contactRepository.getAllContacts();
         } else {
-            tempListAllContacts = contactRepository.getContactByUserId(String.valueOf(userId));
+//            tempListAllContacts = contactRepository.getContactByUserId(String.valueOf(userId));
+            tempListAllContacts = contactRepository.getAllContacts();
         }
         return tempListAllContacts;
     }
 
     @Override
-    public Contact createContact(Contact contact, String userID) {
-        Contact tempContact = contactRepository.createContact(contact, userID);
-        return tempContact;
+    public Contact createContact(HttpServletRequest request, Contact clientContact) {
+        String token = authInterceptor.getTokenExtraction(request);
+        boolean checkTokenValidation = tokenValidator.validateToken(token);
+        if (!checkTokenValidation) {
+            throw new ValidateTokenException("Unauthorized: Invalid or missing token");
+        }
+
+        int userId = authInterceptor.extractUserIdFromToken(token);
+        Contact contact = contactRepository.createContact(clientContact, String.valueOf(userId));
+        return contact;
     }
 
     @Override

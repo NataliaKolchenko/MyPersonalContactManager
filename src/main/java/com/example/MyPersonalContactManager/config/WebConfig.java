@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 
 
 @Configuration
@@ -19,9 +20,11 @@ public class WebConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-//                .csrf(AbstractHttpConfigurer::disable) // Отключение CSRF для упрощения (в продакшене нужно включить)
+                .csrf((csrf) -> csrf
+                        .csrfTokenRepository(new HttpSessionCsrfTokenRepository()).disable()
+                ) // Отключение CSRF для упрощения (в продакшене нужно включить)
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/MyPersonalContactManager").authenticated() // Требует аутентификации для /contacts
+                        .requestMatchers("/MyPersonalContactManager").authenticated() // Требует аутентификации для /MyPersonalContactManager
                         .anyRequest().permitAll() // Остальные запросы разрешены для всех
                 );
 //                .httpBasic(); // Использование Basic Authentication

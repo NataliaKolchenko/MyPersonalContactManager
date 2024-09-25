@@ -29,14 +29,9 @@ public class ContactController {
     private UserServiceImp dbUserService;
 
     @PostMapping(value = "/createContact", consumes = "application/json")
-    public ResponseEntity<ResponseAPI> crateContact(@Valid @RequestBody RequestBodyClient requestBodyClient,
-                                                    @RequestHeader("token") String token) {
-        if (token == null || token.isEmpty()) {
-            responseAPI.response = new Error(400, "Authorization header is missing.");
-            return ResponseEntity.badRequest().body(responseAPI);
-        }
-        String userId = dbUserService.getUserIdByToken(token);
-        Contact contact = dbContactServiceImp.createContact(requestBodyClient.contact, userId);
+    public ResponseEntity<ResponseAPI> crateContact(HttpServletRequest request,
+                                                    @Valid @RequestBody RequestBodyClient requestBodyClient) {
+        Contact contact = dbContactServiceImp.createContact(request, requestBodyClient.contact);
         responseAPI = new ResponseAPI();
         responseAPI.response = contact;
         return ResponseEntity.ok(responseAPI);
@@ -68,6 +63,7 @@ public class ContactController {
         responseAPI = new ResponseAPI();
         try {
             List<Contact> allContacts = dbContactServiceImp.getAllContacts(request);
+            responseAPI.response = allContacts;
             return ResponseEntity.ok(responseAPI);
         } catch (ValidateTokenException e) {
             responseAPI.response = new Error(401, e.getMessage());

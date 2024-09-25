@@ -9,7 +9,7 @@ public interface ContactServiceInterface<T, U> {
 
     List<T> getAllContacts(HttpServletRequest request);
 
-    T createContact(T contactDTO, String userID);
+    T createContact(HttpServletRequest request, T contactDTO);
 
     U updateContact(String id, U newContact);
 
