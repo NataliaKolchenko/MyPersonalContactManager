@@ -17,8 +17,7 @@ import java.util.Date;
 public class TokenValidationService {
     @Autowired
     private AuthInterceptor authInterceptor;
-    @Autowired
-    private TokenValidationService tokenValidator;
+
     private final String secretKey = "5Hdo5+PxMJkLQ9Wo7WnYMR/gBzTfC5XrB3iNPvMlscY=";
 
     public boolean validateToken(String token) {
@@ -41,7 +40,7 @@ public class TokenValidationService {
 
     public void validateRequestToken(HttpServletRequest request) {
         String token = authInterceptor.getTokenExtraction(request);
-        boolean isValid = tokenValidator.validateToken(token);
+        boolean isValid = validateToken(token);
         if (!isValid) {
             throw new ValidateTokenException("Unauthorized: Invalid or missing token");
         }

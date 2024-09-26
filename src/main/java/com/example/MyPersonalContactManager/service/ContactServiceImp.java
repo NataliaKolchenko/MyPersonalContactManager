@@ -16,12 +16,16 @@ import java.util.List;
 @Component
 public class ContactServiceImp implements ContactServiceInterface<Contact, ContactDTOBig> {
 
+    private final ContactRepositoryInterface contactRepository;
+    private final AuthInterceptor authInterceptor;
+    private final TokenValidationService tokenValidator;
+
     @Autowired
-    private ContactRepositoryInterface contactRepository;
-    @Autowired
-    private AuthInterceptor authInterceptor;
-    @Autowired
-    private TokenValidationService tokenValidator;
+    public ContactServiceImp(ContactRepositoryInterface contactRepository, AuthInterceptor authInterceptor, TokenValidationService tokenValidator) {
+        this.contactRepository = contactRepository;
+        this.authInterceptor = authInterceptor;
+        this.tokenValidator = tokenValidator;
+    }
 
 
     @Override

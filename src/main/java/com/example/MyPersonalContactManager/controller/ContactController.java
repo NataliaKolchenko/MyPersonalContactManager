@@ -8,7 +8,6 @@ import com.example.MyPersonalContactManager.models.Error;
 import com.example.MyPersonalContactManager.models.RequestResponseModels.RequestBodyClient;
 import com.example.MyPersonalContactManager.models.RequestResponseModels.ResponseAPI;
 import com.example.MyPersonalContactManager.service.ContactServiceImp;
-import com.example.MyPersonalContactManager.service.UserServiceImp;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +23,12 @@ public class ContactController {
 
     private ResponseAPI responseAPI;
 
+    private final ContactServiceImp dbContactServiceImp;
+
     @Autowired
-    private ContactServiceImp dbContactServiceImp;
-    @Autowired
-    private UserServiceImp dbUserService;
+    public ContactController(ContactServiceImp dbContactServiceImp) {
+        this.dbContactServiceImp = dbContactServiceImp;
+    }
 
     @PostMapping(value = "/createContact", consumes = "application/json")
     public ResponseEntity<ResponseAPI> crateContact(HttpServletRequest request,
