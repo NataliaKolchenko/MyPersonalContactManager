@@ -3,7 +3,6 @@ package com.example.MyPersonalContactManager.repository;
 import com.example.MyPersonalContactManager.exceptions.ContactNotFoundException;
 import com.example.MyPersonalContactManager.models.ContactModels.Contact;
 import com.example.MyPersonalContactManager.models.ContactModels.ContactDTOBig;
-import com.example.MyPersonalContactManager.models.ContactModels.Phone;
 import com.example.MyPersonalContactManager.repository.interfaces.ContactRepositoryInterface;
 import com.example.MyPersonalContactManager.repository.interfaces.JpaContactRepositoryInterface;
 import jakarta.persistence.EntityManager;
@@ -71,13 +70,21 @@ public class ContactRepositoryAdapter implements ContactRepositoryInterface<Cont
     }
 
 
-    public void createPhone(Phone phone, String contactId) {
-        Contact contact = jpaContactRepository.findById(contactId)
-                .orElseThrow(() -> new ContactNotFoundException("Incorrect contact id"));
-        List<Phone> phones = contact.getPhones();
-        phones.add(phone);
-        jpaContactRepository.save(contact);
-    }
+//    public void createPhone(Phone phone, String contactId) {
+//        Contact contact = jpaContactRepository.findById(contactId)
+//                .orElseThrow(() -> new ContactNotFoundException("Incorrect contact id"));
+//        List<Phone> phones = contact.getPhones();
+//        phones.add(phone);
+//        jpaContactRepository.save(contact);
+//    }
+//
+//    public void updatePhone(Phone phone, String contactId) {
+//        Contact contact = jpaContactRepository.findById(contactId)
+//                .orElseThrow(() -> new ContactNotFoundException("Incorrect contact id"));
+//        List<Phone> phones = contact.getPhones();
+//        phones.add(phone);
+//        jpaContactRepository.save(contact);
+//    }
 
     public Contact toEntity(ContactDTOBig contactDTO) {
         Contact contact = new Contact();

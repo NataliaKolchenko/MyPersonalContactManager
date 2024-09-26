@@ -66,7 +66,7 @@ public class Contact {
     }
 
     public Contact(String firstName, String lastName, String email, List<Phone> phones, LocalDate birthday,
-                   String address, URL photo) {
+                   String address, URL photo, String ownerId) {
         this.id = String.valueOf(UUID.randomUUID());
         this.firstName = firstName;
         this.lastName = lastName;
@@ -75,6 +75,7 @@ public class Contact {
         this.birthday = birthday;
         this.address = address;
         this.photo = photo;
+        this.ownerId = ownerId;
         this.createDate = LocalDateTime.now();
         this.lastUpdateDate = LocalDateTime.now();
     }
@@ -106,14 +107,13 @@ public class Contact {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
-                ", phone='" + phones + '\'' +
+                ", phones=" + phones +
                 ", birthday=" + birthday +
                 ", address='" + address + '\'' +
                 ", photo=" + photo +
+                ", ownerId='" + ownerId + '\'' +
                 ", createDate=" + createDate +
-                ", updateDate=" + lastUpdateDate;
-    }
-
-    public void setPhone(List<String> phoneList) {
+                ", lastUpdateDate=" + lastUpdateDate +
+                '}';
     }
 }

@@ -1,10 +1,6 @@
 package com.example.MyPersonalContactManager.models.ContactModels;
 
 import com.example.MyPersonalContactManager.utils.UtilsContact;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,19 +18,23 @@ import static com.example.MyPersonalContactManager.utils.ConstantsContact.DEFAUL
 public class ContactDTOBig {
     @NotBlank
     private String firstName;
+
     private String lastName;
+
     private String email;
-    @NotBlank
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "contactId")
+
     private List<Phone> phones;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+
     private LocalDate birthday;
+
     private String address;
+
     private URL photo;
+
     private LocalDateTime lastUpdateDate;
 
-    public ContactDTOBig(String firstName, String lastName, String email, List<Phone> phones, LocalDate birthday, String address, URL photo) {
+    public ContactDTOBig(String firstName, String lastName, String email, List<Phone> phones, LocalDate birthday,
+                         String address, URL photo) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -49,7 +49,6 @@ public class ContactDTOBig {
         this.lastUpdateDate = LocalDateTime.now();
     }
 
-    //COPY CODE
     public LocalDate getBirthday() {
         UtilsContact utilsContact = new UtilsContact();
         if (utilsContact.isBirthdayDefault(birthday)) {
@@ -58,7 +57,6 @@ public class ContactDTOBig {
         return this.birthday;
     }
 
-    //COPY CODE
     public void setBirthday(LocalDate birthday) {
         UtilsContact utilsContact = new UtilsContact();
 
@@ -68,6 +66,7 @@ public class ContactDTOBig {
     }
 
     public void setPhones(List<Phone> phones) {
+
         this.phones = new ArrayList<>(phones);
     }
 
