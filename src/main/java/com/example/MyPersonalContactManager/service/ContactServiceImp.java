@@ -2,7 +2,6 @@ package com.example.MyPersonalContactManager.service;
 
 import com.example.MyPersonalContactManager.exceptions.AccessDeniedDeleteContactException;
 import com.example.MyPersonalContactManager.exceptions.AccessDeniedUpdateContactException;
-import com.example.MyPersonalContactManager.exceptions.ValidateTokenException;
 import com.example.MyPersonalContactManager.infrastructure.AuthInterceptor;
 import com.example.MyPersonalContactManager.models.ContactModels.Contact;
 import com.example.MyPersonalContactManager.models.ContactModels.ContactDTOBig;
@@ -24,13 +23,11 @@ public class ContactServiceImp implements ContactServiceInterface<Contact, Conta
     @Autowired
     private TokenValidationService tokenValidator;
 
+
     @Override
     public Contact getContactById(HttpServletRequest request, String contactId) {
         String token = authInterceptor.getTokenExtraction(request);
-        boolean checkTokenValidation = tokenValidator.validateToken(token);
-        if (!checkTokenValidation) {
-            throw new ValidateTokenException("Unauthorized: Invalid or missing token");
-        }
+        tokenValidator.validateRequestToken(request);
 
         Contact tempContact = (Contact) contactRepository.getContactByContactId(contactId);
         return tempContact;
@@ -44,14 +41,13 @@ public class ContactServiceImp implements ContactServiceInterface<Contact, Conta
     @Override
     public List<Contact> getAllContacts(HttpServletRequest request) {
         List<Contact> tempListAllContacts;
+
         String token = authInterceptor.getTokenExtraction(request);
-        boolean checkTokenValidation = tokenValidator.validateToken(token);
-        if (!checkTokenValidation) {
-            throw new ValidateTokenException("Unauthorized: Invalid or missing token");
-        }
+        tokenValidator.validateRequestToken(request);
 
         int userId = authInterceptor.extractUserIdFromToken(token);
         String userRole = authInterceptor.extractUserRoleFromToken(token);
+
         if (userRole.equals("ADMIN")) {
             tempListAllContacts = contactRepository.getAllContacts();
         } else {
@@ -63,12 +59,10 @@ public class ContactServiceImp implements ContactServiceInterface<Contact, Conta
     @Override
     public Contact createContact(HttpServletRequest request, Contact clientContact) {
         String token = authInterceptor.getTokenExtraction(request);
-        boolean checkTokenValidation = tokenValidator.validateToken(token);
-        if (!checkTokenValidation) {
-            throw new ValidateTokenException("Unauthorized: Invalid or missing token");
-        }
+        tokenValidator.validateRequestToken(request);
 
         int userId = authInterceptor.extractUserIdFromToken(token);
+
         Contact contact = contactRepository.createContact(clientContact, String.valueOf(userId));
         return contact;
     }
@@ -76,15 +70,13 @@ public class ContactServiceImp implements ContactServiceInterface<Contact, Conta
     @Override
     public ContactDTOBig updateContact(HttpServletRequest request, String contactId, ContactDTOBig updatedContact) {
         String token = authInterceptor.getTokenExtraction(request);
-        boolean checkTokenValidation = tokenValidator.validateToken(token);
-        if (!checkTokenValidation) {
-            throw new ValidateTokenException("Unauthorized: Invalid or missing token");
-        }
+        tokenValidator.validateRequestToken(request);
 
         Contact contact = (Contact) contactRepository.getContactByContactId(contactId);
         int userId = authInterceptor.extractUserIdFromToken(token);
         String userIdString = String.valueOf(userId);
         String userRole = authInterceptor.extractUserRoleFromToken(token);
+
         if (userRole.equals("ADMIN")) {
             contactRepository.updateContact(userId, contactId, updatedContact);
         } else {
@@ -102,10 +94,7 @@ public class ContactServiceImp implements ContactServiceInterface<Contact, Conta
     @Override
     public boolean deleteContactById(HttpServletRequest request, String contactId) {
         String token = authInterceptor.getTokenExtraction(request);
-        boolean checkTokenValidation = tokenValidator.validateToken(token);
-        if (!checkTokenValidation) {
-            throw new ValidateTokenException("Unauthorized: Invalid or missing token");
-        }
+        tokenValidator.validateRequestToken(request);
 
         int userId = authInterceptor.extractUserIdFromToken(token);
         String userRole = authInterceptor.extractUserRoleFromToken(token);

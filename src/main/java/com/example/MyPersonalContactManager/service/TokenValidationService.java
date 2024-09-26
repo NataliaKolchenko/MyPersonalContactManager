@@ -1,9 +1,13 @@
 package com.example.MyPersonalContactManager.service;
 
+import com.example.MyPersonalContactManager.exceptions.ValidateTokenException;
+import com.example.MyPersonalContactManager.infrastructure.AuthInterceptor;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Base64;
@@ -11,6 +15,10 @@ import java.util.Date;
 
 @Service
 public class TokenValidationService {
+    @Autowired
+    private AuthInterceptor authInterceptor;
+    @Autowired
+    private TokenValidationService tokenValidator;
     private final String secretKey = "5Hdo5+PxMJkLQ9Wo7WnYMR/gBzTfC5XrB3iNPvMlscY=";
 
     public boolean validateToken(String token) {
@@ -28,6 +36,14 @@ public class TokenValidationService {
             // Если токен недействителен или подпись неверна
             e.getMessage();
             return false;
+        }
+    }
+
+    public void validateRequestToken(HttpServletRequest request) {
+        String token = authInterceptor.getTokenExtraction(request);
+        boolean isValid = tokenValidator.validateToken(token);
+        if (!isValid) {
+            throw new ValidateTokenException("Unauthorized: Invalid or missing token");
         }
     }
 }
