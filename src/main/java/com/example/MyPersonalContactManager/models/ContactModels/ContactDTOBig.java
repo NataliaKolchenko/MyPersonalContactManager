@@ -2,6 +2,9 @@ package com.example.MyPersonalContactManager.models.ContactModels;
 
 import com.example.MyPersonalContactManager.utils.UtilsContact;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,6 +12,7 @@ import lombok.Setter;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.MyPersonalContactManager.utils.ConstantsContact.DEFAULT_BIRTHDAY;
@@ -21,6 +25,8 @@ public class ContactDTOBig {
     private String lastName;
     private String email;
     @NotBlank
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "contactId")
     private List<Phone> phones;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate birthday;
@@ -59,6 +65,10 @@ public class ContactDTOBig {
         if (utilsContact.isDateNull(birthday)) {
             this.birthday = DEFAULT_BIRTHDAY;
         } else this.birthday = birthday;
+    }
+
+    public void setPhones(List<Phone> phones) {
+        this.phones = new ArrayList<>(phones);
     }
 
     @Override
