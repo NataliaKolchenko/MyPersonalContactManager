@@ -1,6 +1,7 @@
 package com.example.MyPersonalContactManager.service;
 
 import com.example.MyPersonalContactManager.exceptions.AccessDeniedDeleteContactException;
+import com.example.MyPersonalContactManager.exceptions.AccessDeniedUpdateContactException;
 import com.example.MyPersonalContactManager.exceptions.ValidateTokenException;
 import com.example.MyPersonalContactManager.infrastructure.AuthInterceptor;
 import com.example.MyPersonalContactManager.models.ContactModels.Contact;
@@ -51,7 +52,6 @@ public class ContactServiceImp implements ContactServiceInterface<Contact, Conta
 
         int userId = authInterceptor.extractUserIdFromToken(token);
         String userRole = authInterceptor.extractUserRoleFromToken(token);
-        System.out.println(userRole);
         if (userRole.equals("ADMIN")) {
             tempListAllContacts = contactRepository.getAllContacts();
         } else {
@@ -74,9 +74,29 @@ public class ContactServiceImp implements ContactServiceInterface<Contact, Conta
     }
 
     @Override
-    public ContactDTOBig updateContact(String id, ContactDTOBig newContact) {
-        contactRepository.updateContact(id, newContact);
-        return newContact;
+    public ContactDTOBig updateContact(HttpServletRequest request, String contactId, ContactDTOBig updatedContact) {
+        String token = authInterceptor.getTokenExtraction(request);
+        boolean checkTokenValidation = tokenValidator.validateToken(token);
+        if (!checkTokenValidation) {
+            throw new ValidateTokenException("Unauthorized: Invalid or missing token");
+        }
+
+        Contact contact = (Contact) contactRepository.getContactByContactId(contactId);
+        int userId = authInterceptor.extractUserIdFromToken(token);
+        String userIdString = String.valueOf(userId);
+        String userRole = authInterceptor.extractUserRoleFromToken(token);
+        if (userRole.equals("ADMIN")) {
+            contactRepository.updateContact(userId, contactId, updatedContact);
+        } else {
+            if (contact.getOwnerId().equals(userIdString)) {
+                contactRepository.updateContact(userId, contactId, updatedContact);
+            } else {
+                throw new AccessDeniedUpdateContactException("Access Denied Update Contact");
+            }
+        }
+
+
+        return updatedContact;
     }
 
     @Override

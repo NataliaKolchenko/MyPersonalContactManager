@@ -13,7 +13,7 @@ public interface ContactRepositoryInterface<T, U> {
 
     List<Contact> getAllContacts();
 
-    ContactDTOBig updateContact(String id, ContactDTOBig newContact);
+    ContactDTOBig updateContact(int userId, String id, ContactDTOBig newContact);
 
     boolean deleteContactById(String id);
 

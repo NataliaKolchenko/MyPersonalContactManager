@@ -11,7 +11,7 @@ public interface ContactServiceInterface<T, U> {
 
     T createContact(HttpServletRequest request, T contactDTO);
 
-    U updateContact(String id, U newContact);
+    U updateContact(HttpServletRequest request, String contactId, U newContact);
 
     boolean deleteContactById(HttpServletRequest request, String id);
 }

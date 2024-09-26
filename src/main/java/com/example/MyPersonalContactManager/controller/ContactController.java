@@ -60,23 +60,17 @@ public class ContactController {
         }
     }
 
-    @PutMapping(value = "/updateContact/{id}", consumes = "application/json")
-    public ResponseEntity<ResponseAPI> updateContact(@PathVariable String id,
-                                                     @RequestHeader("token") String token,
+    @PutMapping(value = "/updateContact/{contactId}", consumes = "application/json")
+    public ResponseEntity<ResponseAPI> updateContact(HttpServletRequest request,
+                                                     @PathVariable String contactId,
                                                      @RequestBody RequestBodyClient requestBodyClient) {
-        if (token == null || token.isEmpty()) {
-            responseAPI.response = new Error(400, "Authorization header is missing.");
-            return ResponseEntity.badRequest().body(responseAPI);
-        }
-
-        boolean userRole = dbUserService.getUserRoleByToken(token);
         responseAPI = new ResponseAPI();
-        if (userRole) {
-            ContactDTOBig contactDTOBig = dbContactServiceImp.updateContact(id, requestBodyClient.contactDTOBig);
-            responseAPI.response = contactDTOBig;
+        try {
+            ContactDTOBig contact = dbContactServiceImp.updateContact(request, contactId, requestBodyClient.contactDTOBig);
+            responseAPI.response = contact;
             return ResponseEntity.ok(responseAPI);
-        } else {
-            responseAPI.response = new Error(403, "Access denied.");
+        } catch (AccessDeniedDeleteContactException e) {
+            responseAPI.response = new Error(403, e.getMessage());
             return ResponseEntity.ok(responseAPI);
         }
     }

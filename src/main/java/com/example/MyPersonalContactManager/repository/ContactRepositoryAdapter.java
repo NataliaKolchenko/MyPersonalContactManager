@@ -41,9 +41,10 @@ public class ContactRepositoryAdapter implements ContactRepositoryInterface<Cont
     }
 
     @Override
-    public ContactDTOBig updateContact(String id, ContactDTOBig newContact) {
+    public ContactDTOBig updateContact(int userId, String id, ContactDTOBig newContact) {
         Contact contact = toEntity(newContact);
         contact.setId(id);
+        contact.setOwnerId(String.valueOf(userId));
         jpaContactRepository.save(contact);
         ContactDTOBig dto = toDTOBig(contact);
         return dto;
@@ -78,7 +79,7 @@ public class ContactRepositoryAdapter implements ContactRepositoryInterface<Cont
         jpaContactRepository.save(contact);
     }
 
-    private Contact toEntity(ContactDTOBig contactDTO) {
+    public Contact toEntity(ContactDTOBig contactDTO) {
         Contact contact = new Contact();
         contact.setFirstName(contactDTO.getFirstName());
         contact.setLastName(contactDTO.getLastName());
@@ -90,7 +91,7 @@ public class ContactRepositoryAdapter implements ContactRepositoryInterface<Cont
         return contact;
     }
 
-    private ContactDTOBig toDTOBig(Contact contact) {
+    public ContactDTOBig toDTOBig(Contact contact) {
         ContactDTOBig dto = new ContactDTOBig();
         dto.setFirstName(contact.getFirstName());
         dto.setLastName(contact.getLastName());

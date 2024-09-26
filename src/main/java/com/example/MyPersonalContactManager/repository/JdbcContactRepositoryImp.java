@@ -134,7 +134,7 @@ public class JdbcContactRepositoryImp implements ContactRepositoryInterface<Cont
 
 
     @Override
-    public ContactDTOBig updateContact(String id, ContactDTOBig newContact) {
+    public ContactDTOBig updateContact(int UserId, String id, ContactDTOBig newContact) {
         String sql = "UPDATE Contacts " +
                 "set First_Name = ? , Last_Name = ? , Email = ?, Phone = ?, Birth_Day = ?,Address = ?,  " +
                 "Photo = ?, Last_Update_Date = ? where id = ?";
