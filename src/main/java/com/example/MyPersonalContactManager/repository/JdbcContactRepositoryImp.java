@@ -134,10 +134,10 @@ public class JdbcContactRepositoryImp implements ContactRepositoryInterface<Cont
 
 
     @Override
-    public ContactDTOBig updateContact(int UserId, String id, ContactDTOBig newContact) {
+    public ContactDTOBig updateContact(int userId, String id, ContactDTOBig newContact) {
         String sql = "UPDATE Contacts " +
                 "set First_Name = ? , Last_Name = ? , Email = ?, Phone = ?, Birth_Day = ?,Address = ?,  " +
-                "Photo = ?, Last_Update_Date = ? where id = ?";
+                "Photo = ?, Last_Update_Date = ?, userID = ? where id = ?";
 
 //        KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
@@ -149,7 +149,8 @@ public class JdbcContactRepositoryImp implements ContactRepositoryInterface<Cont
             ps.setString(6, newContact.getAddress());
             ps.setString(7, String.valueOf(newContact.getPhoto()));
             ps.setString(8, String.valueOf(newContact.getLastUpdateDate()));
-            ps.setString(9, id);
+            ps.setString(9, String.valueOf(userId));
+            ps.setString(10, id);
             return ps;
         });
 
