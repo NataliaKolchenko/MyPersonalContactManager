@@ -1,6 +1,9 @@
 package com.example.MyPersonalContactManager.models.ContactModels;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,11 +14,11 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "Contacts_Phones")
 public class Phone {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    //    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-
+    @Id
     @Column(name = "Phone_Number")
     private String phoneNumber;
 
